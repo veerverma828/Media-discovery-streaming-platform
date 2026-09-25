@@ -14,6 +14,9 @@ class PlaybackEventHandler {
     this.isSeeking = false;
     this.lastTime = 0;
     this.lastProgressUpdate = 0;
+    // Separate from lastProgressUpdate (which is throttled to ~5s): the
+    // point up to which totalWatchTime has already been accumulated.
+    this.lastWatchTick = 0;
     this.playbackStartTime = 0;
     this.totalWatchTime = 0;
     this.sessionId = this.generateSessionId();
@@ -72,9 +75,10 @@ class PlaybackEventHandler {
     // in handleTimeUpdate computes `now - 0`, inflating totalWatchTime by
     // the entire Unix timestamp on the very first tick.
     this.lastProgressUpdate = Date.now();
+    this.lastWatchTick = this.lastProgressUpdate;
 
     const percentage = this.calculateProgress();
-    
+
     console.log(`[PlaybackEvent] Play started: ${this.metadata.title} (${percentage.toFixed(1)}%)`);
     
     if (this.callbacks.onPlay) {
@@ -130,10 +134,8 @@ class PlaybackEventHandler {
     }
     
     // Update total watch time if playing
-    if (this.isPlaying) {
-      this.totalWatchTime += now - this.lastProgressUpdate;
-    }
-    
+    this.updateTotalWatchTime(now);
+
     // Throttle progress updates
     if (now - this.lastProgressUpdate < this.PROGRESS_UPDATE_INTERVAL) {
       return;
@@ -192,6 +194,7 @@ class PlaybackEventHandler {
       // Page visible - resume tracking
       if (this.isPlaying) {
         this.lastProgressUpdate = Date.now();
+        this.lastWatchTick = this.lastProgressUpdate;
         console.log(`[PlaybackEvent] Page visible, resuming tracking`);
       }
     }
@@ -216,9 +219,10 @@ class PlaybackEventHandler {
     return Math.min((this.video.currentTime / this.video.duration) * 100, 100);
   }
 
-  updateTotalWatchTime() {
-    if (this.isPlaying && this.lastProgressUpdate > 0) {
-      this.totalWatchTime += Date.now() - this.lastProgressUpdate;
+  updateTotalWatchTime(now = Date.now()) {
+    if (this.isPlaying && this.lastWatchTick > 0) {
+      this.totalWatchTime += now - this.lastWatchTick;
+      this.lastWatchTick = now;
     }
   }
 

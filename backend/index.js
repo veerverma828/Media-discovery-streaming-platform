@@ -212,7 +212,8 @@ app.post("/trakt/oauth/token", async (req, res) => {
 // Generic Trakt API proxy - routes all Trakt calls through backend to bypass CORS/Cloudflare
 app.use("/trakt/proxy", async (req, res) => {
   const { clientId } = getTraktConfig();
-  const endpoint = req.path.replace(/^\/+/, "");
+  // req.url (not req.path) so the query string (?limit=50, ?extended=...) is forwarded.
+  const endpoint = req.url.replace(/^\/+/, "");
   const url = `${TRAKT_API}/${endpoint}`;
   const method = req.method.toUpperCase();
 
@@ -272,8 +273,9 @@ app.get("/search", async (req, res) => {
   }
 
   try {
+    const jackettUrl = process.env.JACKETT_URL || "http://localhost:9117";
     const response = await axios.get(
-      "http://localhost:9117/api/v2.0/indexers/all/results",
+      `${jackettUrl}/api/v2.0/indexers/all/results`,
       {
         params: {
           apikey: process.env.JACKETT_API_KEY,
@@ -282,7 +284,7 @@ app.get("/search", async (req, res) => {
       }
     );
 
-    const results = response.data.Results
+    const results = (response.data?.Results || [])
       .map((item) => ({
         title: item.Title,
         size: item.Size,
@@ -501,7 +503,8 @@ app.post("/generate-link", async (req, res) => {
       for (let i = 0; i < 4; i++) {
         try {
           const dlRes = await axios.get(
-            `https://api.torbox.app/v1/api/torrents/requestdl?token=${API_KEY}&torrent_id=${torrentId}&file_id=${fileId}`
+            "https://api.torbox.app/v1/api/torrents/requestdl",
+            { params: { token: API_KEY, torrent_id: torrentId, file_id: fileId } }
           );
 
           if (dlRes.data.success && dlRes.data.data) {

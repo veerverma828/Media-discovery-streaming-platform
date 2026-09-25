@@ -355,6 +355,8 @@ export default function VideoPlayer() {
 
   const handleRetry = () => {
     setCurrentPlayerError(null);
+    // Let a failure after Retry show the error UI again.
+    hasLoggedStreamError.current = false;
 
     if (videoRef.current) {
       videoRef.current.load();
@@ -366,8 +368,10 @@ export default function VideoPlayer() {
     if (!hasLoggedStreamError.current) {
       hasLoggedStreamError.current = true;
       const mediaError = e.target.error;
-      const errorMessage = mediaError?.message || mediaError || "Unknown error";
-      
+      // MediaError.message is often "" — fall back to a string, never the
+      // MediaError object itself (`.includes` would throw on it).
+      const errorMessage = mediaError?.message || "Unknown error";
+
       // Handle privacy fingerprinting errors specifically
       if (errorMessage.includes("Failed to decode media") || errorMessage.includes("privacy.resistFingerprinting")) {
         console.warn("Media decode blocked by privacy settings:", errorMessage);
@@ -382,8 +386,10 @@ export default function VideoPlayer() {
           message: "This video format might not be supported in your browser."
         });
       }
+    } else {
+      // Already reported this error (flag was set above); don't re-log.
+      return;
     }
-    hasLoggedStreamError.current = true;
 
     const mediaError = e.target.error;
     const errorMessage = mediaError?.message || "Unknown";
