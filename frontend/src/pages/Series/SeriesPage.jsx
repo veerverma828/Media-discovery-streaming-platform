@@ -253,6 +253,7 @@ export default function SeriesPage() {
                 <button
                   className="scroll-arrow left"
                   tabIndex="-1"
+                  aria-label="Scroll seasons left"
                   onClick={() => scrollSeasons("left")}
                 >
                   <ChevronLeft size={20} />
@@ -276,6 +277,9 @@ export default function SeriesPage() {
                       setResults([]);
                     }}
                     tabIndex="0"
+                    role="button"
+                    aria-pressed={isActive}
+                    aria-label={Number(s) === 0 ? "Specials" : `Season ${s}`}
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
                         setSelectedSeason(s);
@@ -304,6 +308,7 @@ export default function SeriesPage() {
                 <button
                   className="scroll-arrow right"
                   tabIndex="-1"
+                  aria-label="Scroll seasons right"
                   onClick={() => scrollSeasons("right")}
                 >
                   <ChevronRight size={20} />

@@ -1,10 +1,10 @@
 import { memo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Film, Star } from "lucide-react";
+import { Film, Star, Play } from "lucide-react";
 import { getMovieProgress } from "../../trackers/progressTracker.js";
 import { useSettingsContext } from "../../context/SettingsContext.jsx";
 
-function PosterCard({ item, type }) {
+function PosterCard({ item, type, rank }) {
   const navigate = useNavigate();
   const { syncMode } = useSettingsContext();
   const [imageError, setImageError] = useState(false);
@@ -22,6 +22,8 @@ function PosterCard({ item, type }) {
     <div
       className="poster-card"
       tabIndex="0"
+      role="button"
+      aria-label={item.name}
       onKeyDown={(e) => {
         if (e.key === "Enter") e.currentTarget.click();
       }}
@@ -66,6 +68,19 @@ function PosterCard({ item, type }) {
             ></div>
           </div>
         )}
+
+        {/* Hover-to-play affordance — desktop/mouse only (CSS-gated via
+            @media hover:hover), no JS state so it costs nothing on touch.
+            A 150px tile is too narrow for a Netflix-style text preview
+            (genre/synopsis read as cramped clutter at that width); a
+            centered play glyph over a scrim reads cleanly at any size. */}
+        <div className="poster-hover-scrim" aria-hidden="true">
+          <span className="poster-hover-play">
+            <Play size={20} fill="currentColor" />
+          </span>
+        </div>
+
+        {rank && <div className="poster-rank-badge" aria-hidden="true">{rank}</div>}
       </div>
       <p>{item.name}</p>
       <small>{[item.type, year].filter(Boolean).join(" · ")}</small>

@@ -56,7 +56,7 @@ export default function FileSelectorModal({ files, actionType }) {
           </strong>
           :
         </span>
-        <button onClick={() => navigate(-1)} title="Close">
+        <button onClick={() => navigate(-1)} title="Close" aria-label="Close file selector">
           <X size={16} />
         </button>
       </div>
@@ -66,6 +66,8 @@ export default function FileSelectorModal({ files, actionType }) {
             key={f.id}
             className="file-item"
             tabIndex="0"
+            role="button"
+            aria-label={`${f.name.replace(/^\//, "")}, ${formatBytes(f.size)}`}
             onKeyDown={(e) => {
               if (e.key === "Enter") selectFileAndExecute(f.id);
             }}

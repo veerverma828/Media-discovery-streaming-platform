@@ -17,9 +17,11 @@ export default function Header() {
   }, []);
 
   return (
+    // Opaque bg, not translucent + backdrop-blur: a semi-transparent sticky
+    // header let stale compositor tiles bleed through under it on scroll.
     <div
       className={`sticky top-0 z-30 flex justify-center py-2 transition-colors duration-300 ${
-        scrolled ? "bg-bg-elevated/80 backdrop-blur-md shadow-card" : "bg-transparent"
+        scrolled ? "bg-bg-elevated shadow-card" : "bg-transparent"
       }`}
     >
       <picture>
@@ -27,7 +29,7 @@ export default function Header() {
         <img
           src={appLogoPng}
           alt="Torrent Debrid"
-          className="w-full max-w-[300px] h-auto object-contain cursor-pointer outline-none"
+          className="w-full max-w-[170px] sm:max-w-[220px] md:max-w-[300px] h-auto object-contain cursor-pointer outline-none"
           width="600"
           height="121"
           decoding="async"

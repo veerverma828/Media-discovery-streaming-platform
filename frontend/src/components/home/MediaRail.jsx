@@ -5,7 +5,7 @@ import PosterCard from "../cards/PosterCard.jsx";
 // No entry animation: staggered reveals (0.04s x item count) made long rails
 // take over a second to finish appearing and cost main-thread time on TV.
 
-const MediaRail = memo(function MediaRail({ title, items, type, keyPrefix, renderItem }) {
+const MediaRail = memo(function MediaRail({ title, items, type, keyPrefix, renderItem, showRank }) {
   const scrollerRef = useRef(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
@@ -50,7 +50,11 @@ const MediaRail = memo(function MediaRail({ title, items, type, keyPrefix, rende
             const itemKey = `${keyPrefix || title}-${item.type || type}-${item.id || item.seriesId || index}`;
             return (
               <div key={itemKey} className="media-rail-item">
-                {renderItem ? renderItem(item) : <PosterCard item={item} type={type} />}
+                {renderItem ? (
+                  renderItem(item)
+                ) : (
+                  <PosterCard item={item} type={type} rank={showRank && index < 10 ? index + 1 : undefined} />
+                )}
               </div>
             );
           })}

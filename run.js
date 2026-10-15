@@ -21,7 +21,8 @@ function prefixStream(stream, prefix, colorCode) {
 // Spawn backend
 const backend = spawn(npmCmd, ['start'], {
   cwd: path.join(__dirname, 'backend'),
-  shell: true
+  shell: true,
+  env: { ...process.env, PORT: '5000' }
 });
 
 prefixStream(backend.stdout, '[Backend]', '\x1b[32m'); // Green

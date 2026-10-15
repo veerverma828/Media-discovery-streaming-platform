@@ -74,6 +74,8 @@ function ContinueWatchingCard({ item, onRemove }) {
     <div
       className="poster-card"
       tabIndex="0"
+      role="button"
+      aria-label={meta.title || "Continue watching"}
       onKeyDown={(e) => {
         if (e.key === "Enter") e.currentTarget.click();
       }}
@@ -93,6 +95,7 @@ function ContinueWatchingCard({ item, onRemove }) {
             onRemove(item);
           }}
           title="Remove from Continue Watching"
+          aria-label={`Remove ${meta.title || "item"} from Continue Watching`}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

@@ -183,6 +183,7 @@ export default function SettingsModal() {
             data-modal-trap="true"
             role="dialog"
             aria-modal="true"
+            aria-labelledby="settings-modal-title"
             className="settings-modal-content"
             style={{
               background:
@@ -194,11 +195,12 @@ export default function SettingsModal() {
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
           >
             <div className="flex items-center justify-between mb-3 pb-2.5 border-b border-[#333]">
-              <h2 className="!m-0 !border-0 !p-0">Settings</h2>
+              <h2 id="settings-modal-title" className="!m-0 !border-0 !p-0">Settings</h2>
               <button
                 onClick={() => setIsSettingsOpen(false)}
                 className="flex items-center justify-center w-8 h-8 rounded-full text-text-secondary hover:text-text-primary hover:bg-bg-surface-hover transition-colors"
                 title="Close"
+                aria-label="Close settings"
               >
                 <X size={18} />
               </button>
@@ -261,6 +263,7 @@ export default function SettingsModal() {
                               setTempAddonApis(newApis);
                             }}
                             title="Remove API"
+                            aria-label={`Remove addon API ${index + 1}`}
                           >
                             <X size={16} />
                           </button>

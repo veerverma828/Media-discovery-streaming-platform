@@ -1,6 +1,6 @@
 import { lazy, memo, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
-import { HardDrive, Users, Server, Play, ChevronDown } from "lucide-react";
+import { HardDrive, Users, Server, Play, ChevronDown, Download } from "lucide-react";
 import { useSettingsContext } from "../../context/SettingsContext.jsx";
 import { usePlayerContext } from "../../context/PlayerContext.jsx";
 import { useStreamActions } from "../../hooks/useStreamActions.js";
@@ -41,11 +41,11 @@ function ResultCard({ item, index }) {
 
       <div className="button-container">
         <button
-          className="action-button"
+          className="action-button inline-flex items-center justify-center gap-1.5"
           onClick={() => initAction(item.magnet, "download")}
           disabled={isProcessing}
           style={{
-            background: isProcessing ? "#3f3f46" : "#007BFF",
+            background: isProcessing ? "var(--color-action-copy)" : "var(--color-action-direct)",
             cursor: isProcessing ? "not-allowed" : "pointer",
           }}
         >
@@ -54,7 +54,9 @@ function ResultCard({ item, index }) {
               <span className="loader-small"></span> Processing...
             </>
           ) : isDirect ? (
-            "⬇ Direct Download"
+            <>
+              <Download size={14} /> Direct Download
+            </>
           ) : (
             `Download (${debridService === "torbox" ? "Torbox" : "RD"})`
           )}
@@ -64,7 +66,7 @@ function ResultCard({ item, index }) {
           className="action-button"
           onClick={() => copyMagnet(item.magnet)}
           style={{
-            background: "#3f3f46",
+            background: "var(--color-action-copy)",
             cursor: "pointer",
           }}
         >
@@ -78,7 +80,7 @@ function ResultCard({ item, index }) {
             onClick={() => initAction(item.magnet, "stream", true)}
             disabled={isProcessing}
             style={{
-              background: isProcessing ? "#3f3f46" : "#1db954",
+              background: isProcessing ? "var(--color-action-copy)" : "var(--color-action-stream)",
               cursor: isProcessing ? "not-allowed" : "pointer",
             }}
             title={isDirect ? "Instantly stream video" : "Instantly stream the main video file"}
@@ -99,10 +101,11 @@ function ResultCard({ item, index }) {
               onClick={() => initAction(item.magnet, "stream", false)}
               disabled={isProcessing}
               style={{
-                background: isProcessing ? "#3f3f46" : "#1db954",
+                background: isProcessing ? "var(--color-action-copy)" : "var(--color-action-stream)",
                 cursor: isProcessing ? "not-allowed" : "pointer",
               }}
               title="Choose a specific file to stream"
+              aria-label="Choose a specific file to stream"
             >
               <ChevronDown size={16} />
             </button>
@@ -116,7 +119,7 @@ function ResultCard({ item, index }) {
             onClick={() => initAction(item.magnet, "external", true)}
             disabled={isProcessing}
             style={{
-              background: isProcessing ? "#3f3f46" : "#8b5cf6",
+              background: isProcessing ? "var(--color-action-copy)" : "var(--color-action-external)",
               cursor: isProcessing ? "not-allowed" : "pointer",
             }}
             title={
@@ -141,10 +144,11 @@ function ResultCard({ item, index }) {
               onClick={() => initAction(item.magnet, "external", false)}
               disabled={isProcessing}
               style={{
-                background: isProcessing ? "#3f3f46" : "#8b5cf6",
+                background: isProcessing ? "var(--color-action-copy)" : "var(--color-action-external)",
                 cursor: isProcessing ? "not-allowed" : "pointer",
               }}
               title="Choose a specific file to play externally"
+              aria-label="Choose a specific file to play externally"
             >
               <ChevronDown size={16} />
             </button>

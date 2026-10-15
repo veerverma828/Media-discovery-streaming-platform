@@ -68,7 +68,7 @@ export default function HeroBanner() {
       <motion.div
         key={hero.id}
         className="hero-banner"
-        style={{ backgroundImage: `url(${hero.background})`, touchAction: "pan-y" }}
+        style={{ touchAction: "pan-y" }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.15 }}
@@ -77,8 +77,17 @@ export default function HeroBanner() {
         dragElastic={0.15}
         onDragEnd={handleDragEnd}
       >
+        {/* Background image gets its own layer so a saturation/contrast
+            boost can lift flat source stills without also dulling the
+            white text sitting on top of it. */}
+        <div className="hero-banner-bg" style={{ backgroundImage: `url(${hero.background})` }} />
+
         <div className="hero-banner-overlay">
           <div className="hero-banner-content">
+            <div className="hero-banner-eyebrow">
+              <span className="hero-banner-eyebrow-dot" aria-hidden="true" />
+              Featured {hero.type === "series" ? "Series" : "Movie"}
+            </div>
             <h1 className="hero-banner-title">{hero.name}</h1>
 
             <div className="media-meta-badges">

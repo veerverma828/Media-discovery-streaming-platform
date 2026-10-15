@@ -97,6 +97,7 @@ export default function HomePage() {
               items={movies}
               type="movie"
               keyPrefix="movies"
+              showRank={isBrowsing}
             />
           )}
 
@@ -108,6 +109,7 @@ export default function HomePage() {
               items={series}
               type="series"
               keyPrefix="series"
+              showRank={isBrowsing}
             />
           )}
 
