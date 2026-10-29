@@ -706,10 +706,6 @@ textarea:focus-visible,
     margin: 12px var(--gutter) 0;
   }
 
-  .hero-banner-overlay {
-    padding-bottom: 56px;
-  }
-
   .hero-banner-content .media-meta-badges {
     justify-content: flex-start;
   }
@@ -724,17 +720,34 @@ textarea:focus-visible,
     padding: 0 14px;
   }
 
+  /* Dots live in normal flow under the card so they can never overlap the
+     buttons, whatever the text length or font scaling. */
+  .hero-banner {
+    height: auto;
+    max-height: none;
+    margin-bottom: 0;
+  }
+
+  .hero-banner-overlay {
+    padding-bottom: 18px;
+  }
+
   .hero-dots {
-    left: 16px;
-    right: 16px;
-    bottom: 4px;
+    position: static;
+    justify-content: center;
     gap: 4px;
+    margin-top: 4px;
   }
 
   .hero-dot {
-    flex: 1 1 0;
-    max-width: 48px;
-    width: auto;
+    width: 40px;
+    height: 32px;
+  }
+
+  /* Shorter backdrop so the title and buttons stay on screen. */
+  .hero-banner-bg {
+    aspect-ratio: 2 / 1;
+    background-position: center 20%;
   }
 }
 
