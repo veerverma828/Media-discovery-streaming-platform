@@ -950,3 +950,18 @@ textarea:focus-visible,
   border-color: currentColor;
   border-bottom-color: transparent;
 }
+
+/* Touch phones have no keyboard/D-pad cursor; a focus ring left behind by a
+   tap or restored focus just looks like a stray white line. */
+@media (pointer: coarse) and (hover: none) {
+  button:focus-visible,
+  input:focus-visible,
+  a:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  [tabindex]:focus-visible,
+  [role="button"]:focus-visible,
+  .result-btn:focus-visible {
+    outline: none !important;
+  }
+}
