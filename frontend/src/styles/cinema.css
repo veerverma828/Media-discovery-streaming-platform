@@ -946,6 +946,31 @@ textarea:focus-visible,
   }
 }
 
+/* Phones: two even columns, so Stream + External share one row and
+   Download + Copy share the next, instead of wrapping one per line. */
+@media (max-width: 600px) {
+  .stream-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .stream-actions > * {
+    min-width: 0;
+  }
+
+  .stream-split .stream-btn:not(.stream-btn-icon) {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .stream-actions > .stream-btn {
+    padding: 0 10px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+}
+
 .loader-small {
   border-color: currentColor;
   border-bottom-color: transparent;
