@@ -203,6 +203,64 @@ textarea:focus-visible,
   }
 }
 
+/* Phones: logo + settings on the first row, debrid switch and nav share the
+   second row, search takes the full width below. */
+@media (max-width: 600px) {
+  .site-header-inner {
+    gap: 4px 12px;
+    min-height: 0;
+    padding-top: 6px;
+    padding-bottom: 10px;
+  }
+
+  .site-logo {
+    flex: 1 1 auto;
+  }
+
+  .site-actions {
+    display: contents;
+  }
+
+  .debrid-switch {
+    order: 2;
+    flex: 1 1 100%;
+    justify-content: stretch;
+  }
+
+  .debrid-option {
+    flex: 1 1 0;
+    justify-content: center;
+  }
+
+  .site-actions > .icon-button {
+    order: 1;
+  }
+
+  .site-nav {
+    order: 3;
+    flex: 1 1 100%;
+    justify-content: space-between;
+    gap: 0;
+    border-bottom: 1px solid #1c1c1c;
+  }
+
+  .site-nav-link {
+    flex: 1 1 0;
+    min-height: 40px;
+    padding: 0 8px;
+  }
+
+  .site-search {
+    order: 4;
+  }
+
+  .debrid-option {
+    min-height: 34px;
+    padding: 0 10px;
+    font-size: 12px;
+  }
+}
+
 @media (max-width: 480px) {
   .debrid-option {
     padding: 0 10px;
@@ -642,8 +700,41 @@ textarea:focus-visible,
     -webkit-line-clamp: 3;
   }
 
+  /* Dots sit in the text block's reserved bottom padding, clear of the
+     buttons, and the badge row reads left-aligned like the rest of the text. */
+  .hero-banner-viewport {
+    margin: 12px var(--gutter) 0;
+  }
+
+  .hero-banner-overlay {
+    padding-bottom: 56px;
+  }
+
+  .hero-banner-content .media-meta-badges {
+    justify-content: flex-start;
+  }
+
+  .hero-banner-actions {
+    gap: 10px;
+  }
+
+  .hero-banner-actions .hero-btn {
+    flex: 1 1 0;
+    justify-content: center;
+    padding: 0 14px;
+  }
+
   .hero-dots {
-    left: calc(var(--gutter) + 16px);
+    left: 16px;
+    right: 16px;
+    bottom: 4px;
+    gap: 4px;
+  }
+
+  .hero-dot {
+    flex: 1 1 0;
+    max-width: 48px;
+    width: auto;
   }
 }
 
