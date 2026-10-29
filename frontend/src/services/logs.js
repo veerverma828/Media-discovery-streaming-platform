@@ -1,5 +1,3 @@
-const isNativePlayerAvailable = false;
-
 /**
  * App-wide diagnostics log. In the Android app, errors are appended to the
  * same persistent file a native crash writes to (AppLogger.java) — so
@@ -26,11 +24,7 @@ function appendWebLog(line) {
 
 function record(tag, message) {
   const line = `${new Date().toISOString()} E/${tag}: ${message}`;
-  if (isNativePlayerAvailable) {
-    logClientError(tag, message);
-  } else {
-    appendWebLog(line);
-  }
+  appendWebLog(line);
 }
 
 /** Call once at app startup. Captures uncaught JS errors and promise
@@ -61,10 +55,6 @@ export function logError(tag, message) {
  *  before the native bridge was ready). */
 export async function getCombinedLogs() {
   const parts = [];
-  if (isNativePlayerAvailable) {
-    const native = await getNativeLogs();
-    if (native) parts.push(native);
-  }
   try {
     const web = localStorage.getItem(WEB_LOG_KEY);
     if (web) parts.push("--- web/JS log ---\n" + web);
@@ -75,7 +65,6 @@ export async function getCombinedLogs() {
 }
 
 export async function clearAllLogs() {
-  if (isNativePlayerAvailable) await clearNativeLogs();
   try {
     localStorage.removeItem(WEB_LOG_KEY);
   } catch {

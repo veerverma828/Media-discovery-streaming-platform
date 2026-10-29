@@ -117,6 +117,9 @@ export function useSearch() {
       return;
     }
 
+    // Results render on Home only; otherwise they would land in a detail page's stream list.
+    navigate("/");
+
     try {
       const encodedQuery = encodeURIComponent(trimmedQuery);
       const res = await fetch(`${API_URL}/search?q=${encodedQuery}`, {

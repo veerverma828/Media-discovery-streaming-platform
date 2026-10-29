@@ -1,58 +1,48 @@
-/* Hide the horizontal scrollbar caused by 100vw pushing past the vertical scrollbar */
+:root {
+  --gutter: clamp(16px, 4vw, 56px);
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
 html {
-  background-color: var(--color-bg-base, #0a0a0a);
+  background-color: var(--color-bg-base, #000);
+  scrollbar-width: thin;
+  scrollbar-color: #333 #000;
 }
 
 body {
   overflow-x: hidden;
   margin: 0;
   min-height: 100%;
-  /* Faint off-axis glow instead of flat #0a0a0a everywhere — cheap depth,
-     fixed so it doesn't repeat/shift as the page grows taller. */
-  background:
-    radial-gradient(1200px 700px at 15% 0%, rgba(229, 9, 20, 0.05), transparent 60%),
-    var(--color-bg-base, #0a0a0a);
-  background-attachment: fixed;
+  background: var(--color-bg-base, #000);
 }
 
-/* 1-2% film-grain overlay — the classic cheap trick against flat dark UI /
-   gradient banding. Fixed + pointer-events:none so it never blocks input,
-   and one shared layer for the whole page instead of per-component cost. */
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  pointer-events: none;
-  opacity: 0.025;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 
-/* Custom Global Scrollbar */
+/* Neutral global scrollbar */
 ::-webkit-scrollbar {
   width: 10px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #141414;
+  background: #000;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, rgba(0, 198, 255, 0.4) 0%, rgba(0, 114, 255, 0.4) 100%);
+  background: #2e2e2e;
   border-radius: 5px;
-  border: 2px solid #141414;
+  border: 2px solid #000;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, rgba(0, 198, 255, 0.9) 0%, rgba(0, 114, 255, 0.9) 100%);
-}
-
-/* For Firefox compatibility */
-html {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(0, 114, 255, 0.45) #141414;
+  background: #444;
 }
 
 
@@ -65,7 +55,7 @@ html {
 }
 
 .app-container {
-  padding: 20px 12px;
+  padding: 0 0 56px;
   width: 100%;
   max-width: 100%;
   margin: 0;
@@ -392,7 +382,7 @@ textarea:focus-visible,
 
 @media (max-width: 768px) {
   .app-container {
-    padding: 16px 8px;
+    padding: 0 0 40px;
   }
 
   .section-title {
@@ -461,13 +451,13 @@ textarea:focus-visible,
 }
 
 .media-rail::-webkit-scrollbar-thumb {
-  background: rgba(0, 123, 255, 0.4);
+  background: rgba(255, 255, 255, 0.16);
   border-radius: 3px;
   transition: background 0.3s ease;
 }
 
 .media-rail::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 123, 255, 0.7);
+  background: rgba(255, 255, 255, 0.32);
 }
 
 /* ============================= */

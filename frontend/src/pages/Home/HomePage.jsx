@@ -11,6 +11,9 @@ import HeroBanner from "../../components/home/HeroBanner.jsx";
 import MediaRail from "../../components/home/MediaRail.jsx";
 import SkeletonRail from "../../components/home/SkeletonRail.jsx";
 
+// Genre rails repeat titles from the trending rails; keep them short.
+const GENRE_RAIL_LIMIT = 20;
+
 export default function HomePage() {
   const {
     movies,
@@ -62,7 +65,10 @@ export default function HomePage() {
 
   const genreRails = useMemo(() => {
     if (!isBrowsing) return [];
-    return groupByGenre([...movies, ...series]);
+    return groupByGenre([...movies, ...series]).map((rail) => ({
+      ...rail,
+      items: rail.items.slice(0, GENRE_RAIL_LIMIT),
+    }));
   }, [isBrowsing, movies, series]);
 
   // Stable identity so MediaRail's memo isn't defeated by a fresh closure

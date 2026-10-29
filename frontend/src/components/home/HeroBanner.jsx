@@ -3,9 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Play, Info, Star, ChevronLeft, ChevronRight } from "lucide-react";
 import { useAppContext } from "../../context/AppContext.jsx";
+import { useSettingsContext } from "../../context/SettingsContext.jsx";
+import { fetchMovieStreams } from "../../services/cinemeta.js";
 
 const HERO_POOL_SIZE = 5;
-const AUTO_ADVANCE_MS = 8000;
+const AUTO_ADVANCE_MS = 60000;
 const SWIPE_THRESHOLD = 80;
 
 function pickHeroCandidates(movies, series) {
@@ -25,7 +27,9 @@ export default function HeroBanner() {
     [movies.length, series.length]
   );
 
+  const { addonApis } = useSettingsContext();
   const [index, setIndex] = useState(0);
+  const [playLoading, setPlayLoading] = useState(false);
   const timerRef = useRef(null);
 
   const count = candidates.length;
@@ -56,6 +60,25 @@ export default function HeroBanner() {
 
   const goToDetail = () => {
     navigate(`/${hero.type}/${hero.id}`, { state: { item: hero } });
+  };
+
+  // Movies: Play streams the first source straight away, same path as
+  // Continue Watching. Series need an episode choice, so they open the page.
+  const handlePlay = async () => {
+    if (hero.type !== "movie" || playLoading) {
+      goToDetail();
+      return;
+    }
+    setPlayLoading(true);
+    try {
+      const streams = await fetchMovieStreams(hero.id, addonApis);
+      const magnet = streams?.[0]?.magnet;
+      navigate(`/movie/${hero.id}`, { state: { item: hero, autoPlayMagnet: magnet || null } });
+    } catch {
+      goToDetail();
+    } finally {
+      setPlayLoading(false);
+    }
   };
 
   const handleDragEnd = (_event, info) => {
@@ -109,8 +132,8 @@ export default function HeroBanner() {
             <p className="hero-banner-description">{hero.description}</p>
 
             <div className="hero-banner-actions">
-              <button className="hero-btn hero-btn-play" onClick={goToDetail}>
-                <Play size={18} fill="currentColor" /> Play
+              <button className="hero-btn hero-btn-play" onClick={handlePlay} disabled={playLoading}>
+                <Play size={18} fill="currentColor" /> {playLoading ? "Loading..." : "Play"}
               </button>
               <button className="hero-btn hero-btn-info" onClick={goToDetail}>
                 <Info size={18} /> More Info

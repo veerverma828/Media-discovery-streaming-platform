@@ -4,12 +4,10 @@ import { useAppContext } from "../context/AppContext.jsx";
 import { usePlayerContext } from "../context/PlayerContext.jsx";
 import { useSettingsContext } from "../context/SettingsContext.jsx";
 import { useKeyboardNavigation } from "../hooks/useKeyboardNavigation.js";
-import { useDebrid } from "../hooks/useDebrid.js";
-import SettingsButton from "../components/layout/SettingsButton.jsx";
 import Header from "../components/layout/Header.jsx";
-import SearchBar from "../components/layout/SearchBar.jsx";
 import Toast from "../components/common/Toast.jsx";
 import "../styles/globals.css";
+import "../styles/cinema.css";
 import "../styles/animations.css";
 import "../components/modals/SettingsModal.css";
 
@@ -22,8 +20,6 @@ export default function Layout() {
   const { results, seasons, episodes, selectedSeason } = useAppContext();
   const { streamUrl, fileModalData, setFileModalData, setStreamUrl } = usePlayerContext();
   const { isSettingsOpen } = useSettingsContext();
-
-  const { debridService, handleDebridChange } = useDebrid();
 
   useKeyboardNavigation();
 
@@ -102,41 +98,7 @@ export default function Layout() {
 
   return (
     <div className="app-container min-h-screen bg-bg-base text-text-primary font-sans">
-      <SettingsButton />
-
       <Header />
-
-      {/* Debrid Service Selector — plain CSS sliding pill (no framer-motion,
-          which was otherwise the only reason this whole component tree
-          pulled the animation library into the eager main bundle). */}
-      <div className="options-container">
-        <div className="relative inline-flex rounded-full bg-bg-surface p-1 gap-0 text-xs">
-          <div
-            className="absolute inset-y-1 w-1/2 rounded-full bg-accent-primary transition-transform duration-300 ease-out -z-10"
-            style={{ transform: debridService === "torbox" ? "translateX(100%)" : "translateX(0)" }}
-          />
-          {[
-            { value: "real-debrid", label: "Real-Debrid" },
-            { value: "torbox", label: "Torbox" },
-          ].map((opt) => {
-            const isActive = debridService === opt.value;
-            return (
-              <button
-                key={opt.value}
-                type="button"
-                onClick={() => handleDebridChange(opt.value)}
-                className={`relative px-4 py-1.5 rounded-full font-medium transition-colors ${
-                  isActive ? "text-white" : "text-text-secondary hover:text-text-primary"
-                }`}
-              >
-                {opt.label}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      <SearchBar />
 
       {/* No route transition animation: mode="wait" forced an exit fade +
           enter fade in sequence, adding ~250ms of dead time to every

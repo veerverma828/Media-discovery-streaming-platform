@@ -177,7 +177,7 @@ export default function SeriesPage() {
   const isEpisodePath = !!(seasonParam && episodeParam);
 
   return (
-    <div className="series-page-wrapper" style={{ padding: "0 10px" }}>
+    <div className="series-page-wrapper page-gutter">
       {loading && <Loader />}
 
       {meta && (
@@ -268,10 +268,6 @@ export default function SeriesPage() {
                   <div
                     key={s}
                     className={`season-tab ${isActive ? "active" : ""}`}
-                    onMouseEnter={() => {
-                      setSelectedSeason(s);
-                      setResults([]);
-                    }}
                     onClick={() => {
                       setSelectedSeason(s);
                       setResults([]);

@@ -25,48 +25,50 @@ export default function SearchBar() {
   const runSearch = useJackett || imdbMode ? searchTorrents : searchContent;
 
   return (
-    <div className="flex justify-center items-center mt-5 px-2">
-      <div className="relative w-full max-w-[500px]">
-        <Search
-          size={18}
-          className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-text-muted"
-        />
-        <input
-          type="text"
-          id="search-input"
-          name="search"
-          placeholder={placeholder}
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={handleKeyDown}
-          className={`w-full h-[46px] text-base pl-11 rounded-full border border-border-strong bg-bg-input text-text-primary outline-none transition-colors duration-300 focus:border-accent-primary ${
-            hasQuery ? "pr-20" : "pr-11"
-          }`}
-        />
-        {hasQuery && (
-          <button
-            type="button"
-            aria-label="Clear search"
-            onClick={() => setQuery("")}
-            className="absolute right-11 top-1/2 -translate-y-1/2 flex items-center justify-center w-7 h-7 rounded-full text-text-muted hover:text-text-primary hover:bg-bg-surface-hover transition-colors"
-          >
-            <X size={16} />
-          </button>
-        )}
+    <div className="relative w-full">
+      <Search
+        size={18}
+        aria-hidden="true"
+        className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-text-muted"
+      />
+      <label htmlFor="search-input" className="sr-only">
+        Search
+      </label>
+      <input
+        type="text"
+        id="search-input"
+        name="search"
+        placeholder={placeholder}
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        onKeyDown={handleKeyDown}
+        className={`w-full h-11 text-[15px] pl-11 rounded-full border border-border-default bg-bg-input text-text-primary placeholder:text-text-muted outline-none transition-colors duration-150 focus:border-text-primary ${
+          hasQuery ? "pr-20" : "pr-11"
+        }`}
+      />
+      {hasQuery && (
         <button
           type="button"
-          aria-label="Search"
-          onClick={runSearch}
-          disabled={!hasQuery}
-          className={`absolute right-1.5 top-1/2 -translate-y-1/2 flex items-center justify-center w-9 h-9 rounded-full text-white transition-all duration-300 ${
-            hasQuery
-              ? "bg-accent-primary hover:bg-accent-primary-hover shadow-[0_4px_15px_rgba(229,9,20,0.4)] cursor-pointer"
-              : "bg-bg-surface text-text-disabled cursor-not-allowed"
-          }`}
+          aria-label="Clear search"
+          onClick={() => setQuery("")}
+          className="absolute right-11 top-1/2 -translate-y-1/2 flex items-center justify-center w-7 h-7 rounded-full text-text-muted hover:text-text-primary hover:bg-bg-surface-hover transition-colors"
         >
-          <ArrowRight size={18} />
+          <X size={16} />
         </button>
-      </div>
+      )}
+      <button
+        type="button"
+        aria-label="Search"
+        onClick={runSearch}
+        disabled={!hasQuery}
+        className={`absolute right-1.5 top-1/2 -translate-y-1/2 flex items-center justify-center w-8 h-8 rounded-full transition-colors duration-150 ${
+          hasQuery
+            ? "bg-accent-primary text-white hover:bg-accent-primary-hover cursor-pointer"
+            : "bg-bg-surface-hover text-text-disabled cursor-not-allowed"
+        }`}
+      >
+        <ArrowRight size={16} />
+      </button>
     </div>
   );
 }

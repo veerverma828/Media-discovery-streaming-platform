@@ -1,6 +1,6 @@
 import { memo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Film, Star, Play } from "lucide-react";
+import { Film, Star } from "lucide-react";
 import { getMovieProgress } from "../../trackers/progressTracker.js";
 import { useSettingsContext } from "../../context/SettingsContext.jsx";
 
@@ -14,8 +14,8 @@ function PosterCard({ item, type, rank }) {
 
   // Determine progress bar color based on sync mode
   const getProgressColor = (percentage) => {
-    if (percentage > 90) return "#1db954"; // Green for completed
-    return syncMode === "trakt" ? "#e50914" : "#007BFF"; // Red for Trakt, Blue for local
+    if (percentage > 90) return "#34c77b"; // Green for completed
+    return syncMode === "trakt" ? "#e50914" : "#f5f5f5"; // Red for Trakt, white for local
   };
 
   return (
@@ -51,12 +51,6 @@ function PosterCard({ item, type, rank }) {
             draggable="false"
           />
         )}
-        {item.imdbRating && (
-          <div className="poster-rating-badge">
-            <Star size={11} fill="currentColor" />
-            {item.imdbRating}
-          </div>
-        )}
         {progress && progress.percentage > 0 && (
           <div className="progress-bar-container">
             <div
@@ -69,14 +63,18 @@ function PosterCard({ item, type, rank }) {
           </div>
         )}
 
-        {/* Hover-to-play affordance — desktop/mouse only (CSS-gated via
-            @media hover:hover), no JS state so it costs nothing on touch.
-            A 150px tile is too narrow for a Netflix-style text preview
-            (genre/synopsis read as cramped clutter at that width); a
-            centered play glyph over a scrim reads cleanly at any size. */}
-        <div className="poster-hover-scrim" aria-hidden="true">
-          <span className="poster-hover-play">
-            <Play size={20} fill="currentColor" />
+        {/* Info slides up on hover/focus for mouse users (CSS-gated via
+            @media hover:hover). Touch and TV keep the title under the poster. */}
+        <div className="poster-info" aria-hidden="true">
+          <span className="poster-info-title">{item.name}</span>
+          <span className="poster-info-meta">
+            {item.imdbRating && (
+              <span className="poster-info-rating">
+                <Star size={12} fill="currentColor" />
+                {item.imdbRating}
+              </span>
+            )}
+            {year && <span>{year}</span>}
           </span>
         </div>
 

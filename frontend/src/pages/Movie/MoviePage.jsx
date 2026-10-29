@@ -65,7 +65,7 @@ export default function MoviePage() {
   }, [id, addonApis, location.pathname]);
 
   return (
-    <div className="movie-page-wrapper" style={{ padding: "0 10px" }}>
+    <div className="movie-page-wrapper page-gutter">
       {loading && <Loader />}
 
       {meta && (

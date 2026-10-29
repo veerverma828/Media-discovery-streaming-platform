@@ -1,14 +1,12 @@
 import { lazy, memo, Suspense } from "react";
-import { useNavigate } from "react-router-dom";
-import { HardDrive, Users, Server, Play, ChevronDown, Download } from "lucide-react";
+import { HardDrive, Users, Server, Play, ChevronDown, Download, Copy } from "lucide-react";
 import { useSettingsContext } from "../../context/SettingsContext.jsx";
 import { usePlayerContext } from "../../context/PlayerContext.jsx";
 import { useStreamActions } from "../../hooks/useStreamActions.js";
 
 const FileSelectorModal = lazy(() => import("../modals/FileSelectorModal.jsx"));
 
-function ResultCard({ item, index }) {
-  const navigate = useNavigate();
+function ResultCard({ item }) {
   const { useJackett, debridService } = useSettingsContext();
   const { processingMagnet, fileModalData } = usePlayerContext();
   const { initAction, copyMagnet } = useStreamActions();
@@ -18,71 +16,34 @@ function ResultCard({ item, index }) {
   const isFileModalOpen = fileModalData && fileModalData.magnet === item.magnet && !isDirect;
 
   return (
-    <div className="rounded-lg bg-bg-surface border border-border-subtle p-4 mt-2.5 hover:border-border-strong transition-colors">
-      <h3 className="result-title text-text-primary font-semibold text-base mb-1 break-words">
-        {item.title}
-      </h3>
+    <div className="stream-row">
+      <div className="stream-info">
+        <h3 className="result-title stream-title">{item.title}</h3>
 
-      <div className="flex flex-wrap gap-3 mb-2 text-xs text-text-secondary">
-        <span className="inline-flex items-center gap-1">
-          <Server size={13} /> {item.provider}
-        </span>
-        {useJackett && (
-          <>
-            <span className="inline-flex items-center gap-1">
-              <HardDrive size={13} /> {Math.round(item.size / 1000000)} MB
-            </span>
-            <span className="inline-flex items-center gap-1">
-              <Users size={13} /> {item.seeders}
-            </span>
-          </>
-        )}
+        <div className="stream-meta">
+          <span className="inline-flex items-center gap-1.5">
+            <Server size={13} aria-hidden="true" /> {item.provider}
+          </span>
+          {useJackett && (
+            <>
+              <span className="inline-flex items-center gap-1.5">
+                <HardDrive size={13} aria-hidden="true" /> {Math.round(item.size / 1000000)} MB
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <Users size={13} aria-hidden="true" /> {item.seeders}
+              </span>
+            </>
+          )}
+        </div>
       </div>
 
-      <div className="button-container">
-        <button
-          className="action-button inline-flex items-center justify-center gap-1.5"
-          onClick={() => initAction(item.magnet, "download")}
-          disabled={isProcessing}
-          style={{
-            background: isProcessing ? "var(--color-action-copy)" : "var(--color-action-direct)",
-            cursor: isProcessing ? "not-allowed" : "pointer",
-          }}
-        >
-          {isProcessing ? (
-            <>
-              <span className="loader-small"></span> Processing...
-            </>
-          ) : isDirect ? (
-            <>
-              <Download size={14} /> Direct Download
-            </>
-          ) : (
-            `Download (${debridService === "torbox" ? "Torbox" : "RD"})`
-          )}
-        </button>
-
-        <button
-          className="action-button"
-          onClick={() => copyMagnet(item.magnet)}
-          style={{
-            background: "var(--color-action-copy)",
-            cursor: "pointer",
-          }}
-        >
-          Copy {isDirect ? "Link" : "Magnet"}
-        </button>
-
-        {/* Stream Button Group */}
-        <div className="split-btn-group push-right">
+      <div className="stream-actions">
+        {/* Stream: the one filled action in the row */}
+        <div className="stream-split">
           <button
-            className={`result-btn action-button ${!isDirect ? "split-btn-main" : ""} inline-flex items-center justify-center gap-1.5`}
+            className="result-btn stream-btn stream-btn-primary"
             onClick={() => initAction(item.magnet, "stream", true)}
             disabled={isProcessing}
-            style={{
-              background: isProcessing ? "var(--color-action-copy)" : "var(--color-action-stream)",
-              cursor: isProcessing ? "not-allowed" : "pointer",
-            }}
             title={isDirect ? "Instantly stream video" : "Instantly stream the main video file"}
           >
             {isProcessing ? (
@@ -91,19 +52,15 @@ function ResultCard({ item, index }) {
               </>
             ) : (
               <>
-                <Play size={14} fill="currentColor" /> Stream
+                <Play size={14} fill="currentColor" aria-hidden="true" /> Stream
               </>
             )}
           </button>
           {!isDirect && (
             <button
-              className="action-button split-btn-arrow flex items-center justify-center"
+              className="stream-btn stream-btn-primary stream-btn-icon"
               onClick={() => initAction(item.magnet, "stream", false)}
               disabled={isProcessing}
-              style={{
-                background: isProcessing ? "var(--color-action-copy)" : "var(--color-action-stream)",
-                cursor: isProcessing ? "not-allowed" : "pointer",
-              }}
               title="Choose a specific file to stream"
               aria-label="Choose a specific file to stream"
             >
@@ -112,16 +69,11 @@ function ResultCard({ item, index }) {
           )}
         </div>
 
-        {/* External Stream Button */}
-        <div className="split-btn-group">
+        <div className="stream-split">
           <button
-            className={`result-btn action-button ${!isDirect ? "split-btn-main" : ""} inline-flex items-center justify-center gap-1.5`}
+            className="result-btn stream-btn"
             onClick={() => initAction(item.magnet, "external", true)}
             disabled={isProcessing}
-            style={{
-              background: isProcessing ? "var(--color-action-copy)" : "var(--color-action-external)",
-              cursor: isProcessing ? "not-allowed" : "pointer",
-            }}
             title={
               isDirect
                 ? "Instantly play in an external player"
@@ -133,20 +85,14 @@ function ResultCard({ item, index }) {
                 <span className="loader-small"></span> Loading...
               </>
             ) : (
-              <>
-                <Play size={14} fill="currentColor" /> External
-              </>
+              "External"
             )}
           </button>
           {!isDirect && (
             <button
-              className="action-button split-btn-arrow flex items-center justify-center"
+              className="stream-btn stream-btn-icon"
               onClick={() => initAction(item.magnet, "external", false)}
               disabled={isProcessing}
-              style={{
-                background: isProcessing ? "var(--color-action-copy)" : "var(--color-action-external)",
-                cursor: isProcessing ? "not-allowed" : "pointer",
-              }}
               title="Choose a specific file to play externally"
               aria-label="Choose a specific file to play externally"
             >
@@ -154,14 +100,39 @@ function ResultCard({ item, index }) {
             </button>
           )}
         </div>
+
+        <button
+          className="stream-btn"
+          onClick={() => initAction(item.magnet, "download")}
+          disabled={isProcessing}
+        >
+          {isProcessing ? (
+            <>
+              <span className="loader-small"></span> Processing...
+            </>
+          ) : isDirect ? (
+            <>
+              <Download size={14} aria-hidden="true" /> Direct Download
+            </>
+          ) : (
+            <>
+              <Download size={14} aria-hidden="true" /> Download ({debridService === "torbox" ? "Torbox" : "RD"})
+            </>
+          )}
+        </button>
+
+        <button
+          className="stream-btn"
+          onClick={() => copyMagnet(item.magnet)}
+          title={`Copy ${isDirect ? "link" : "magnet"}`}
+        >
+          <Copy size={14} aria-hidden="true" /> Copy {isDirect ? "Link" : "Magnet"}
+        </button>
       </div>
 
       {isFileModalOpen && (
         <Suspense fallback={null}>
-          <FileSelectorModal
-            files={fileModalData.files}
-            actionType={fileModalData.actionType}
-          />
+          <FileSelectorModal files={fileModalData.files} actionType={fileModalData.actionType} />
         </Suspense>
       )}
     </div>

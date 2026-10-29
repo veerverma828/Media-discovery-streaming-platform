@@ -17,8 +17,8 @@ function ContinueWatchingCard({ item, onRemove }) {
 
   // Determine progress bar color based on sync mode (not item.source)
   const getProgressColor = () => {
-    if (item.percentage > 90) return "#1db954"; // Green for completed
-    return syncMode === "trakt" ? "#e50914" : "#007BFF"; // Red for Trakt, Blue for local
+    if (item.percentage > 90) return "#34c77b"; // Green for completed
+    return syncMode === "trakt" ? "#e50914" : "#f5f5f5"; // Red for Trakt, white for local
   };
 
   useEffect(() => {
@@ -126,8 +126,14 @@ function ContinueWatchingCard({ item, onRemove }) {
             <div className="poster-placeholder-text">{meta.title || "Loading..."}</div>
           </div>
         )}
+        <div className="poster-info" aria-hidden="true">
+          <span className="poster-info-title">{meta.title || "Loading..."}</span>
+          <span className="poster-info-meta">
+            <span>{item.type === "movie" ? "Movie" : `S${item.season} E${item.episode}`}</span>
+          </span>
+        </div>
         {item.isNext && (
-          <div className="next-ep-badge">Next Episode ▶</div>
+          <div className="next-ep-badge">Next Episode</div>
         )}
         {!item.isNext && (
           <div className="progress-bar-container">

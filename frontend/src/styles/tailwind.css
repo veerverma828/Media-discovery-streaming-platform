@@ -1,51 +1,53 @@
 @import "tailwindcss";
 
 @theme {
-  /* Background layers */
-  --color-bg-base: #0a0a0a;
-  --color-bg-elevated: #141414;
-  --color-bg-surface: #1a1a1a;
-  --color-bg-surface-hover: #232323;
-  --color-bg-input: #2a2a2a;
+  /* Background layers: true black page, small surface steps */
+  --color-bg-base: #000000;
+  --color-bg-elevated: #0b0b0b;
+  --color-bg-surface: #121212;
+  --color-bg-surface-hover: #1a1a1a;
+  --color-bg-input: #121212;
 
   /* Borders */
   --color-border-subtle: #262626;
   --color-border-default: #333333;
   --color-border-strong: #444444;
 
-  /* Text hierarchy */
-  --color-text-primary: #ffffff;
-  --color-text-secondary: #b3b3b3;
-  --color-text-muted: #737373;
-  --color-text-disabled: #525252;
+  /* Text hierarchy (muted is 7.4:1 on black, was 4.2:1) */
+  --color-text-primary: #f5f5f5;
+  --color-text-secondary: #b5b5b5;
+  --color-text-muted: #9a9a9a;
+  --color-text-disabled: #6b6b6b;
 
-  /* Primary brand accent (Netflix red) */
+  /* Brand accent: fills and large type only. Use accent-text for small red text. */
   --color-accent-primary: #e50914;
   --color-accent-primary-hover: #f6121d;
   --color-accent-primary-active: #b20710;
+  --color-accent-text: #ff5a62;
 
-  /* Semantic action colors */
-  --color-action-direct: #007bff;
-  --color-action-direct-hover: #0d6efd;
-  --color-action-stream: #1db954;
-  --color-action-stream-hover: #1ed760;
-  --color-action-external: #8b5cf6;
-  --color-action-external-hover: #a78bfa;
+  /* Stream actions: one filled primary, the rest neutral */
+  --color-action-direct: #1a1a1a;
+  --color-action-direct-hover: #262626;
+  --color-action-stream: #e50914;
+  --color-action-stream-hover: #f6121d;
+  --color-action-external: #1a1a1a;
+  --color-action-external-hover: #262626;
   --color-action-copy: #3f3f46;
   --color-action-copy-hover: #52525b;
 
   /* Semantic status colors */
   --color-warning: #f5c518;
-  --color-success: #1db954;
+  --color-success: #34c77b;
   --color-danger: #e50914;
   --color-info: #2196f3;
 
   /* Typography */
   --font-sans: 'InterVariable', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: 'Archivo Variable', 'InterVariable', ui-sans-serif, system-ui, sans-serif;
 
-  /* Radii/shadows */
-  --radius-card: 0.5rem;
-  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.4);
+  /* Radii/shadows (depth comes from lines, not glow) */
+  --radius-card: 0.625rem;
+  --shadow-card: none;
   --shadow-card-hover: 0 12px 32px rgba(0, 0, 0, 0.55);
-  --shadow-modal: 0 24px 64px rgba(0, 0, 0, 0.6);
+  --shadow-modal: 0 24px 64px rgba(0, 0, 0, 0.7);
 }

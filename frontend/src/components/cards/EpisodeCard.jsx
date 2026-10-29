@@ -19,7 +19,7 @@ function EpisodeCard({ episode, seriesId, selectedItem, rating: ratingProp }) {
   // Determine progress bar color based on sync mode
   const getProgressColor = (percentage) => {
     if (percentage > 90) return "#1db954"; // Green for completed
-    return syncMode === "trakt" ? "#e50914" : "#007BFF"; // Red for Trakt, Blue for local
+    return syncMode === "trakt" ? "#e50914" : "#f5f5f5"; // Red for Trakt, white for local
   };
 
   return (

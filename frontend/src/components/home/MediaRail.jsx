@@ -30,7 +30,7 @@ const MediaRail = memo(function MediaRail({ title, items, type, keyPrefix, rende
   if (!items?.length) return null;
 
   return (
-    <div className="media-rail-section">
+    <div className="media-rail-section" id={keyPrefix ? `rail-${keyPrefix}` : undefined}>
       <h2 className="section-title">{title}</h2>
 
       <div className="media-rail-wrapper">
