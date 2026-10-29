@@ -27,12 +27,32 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [pendingRail, setPendingRail] = useState(null);
 
+  // Which nav item gets the red underline. On Home it follows the scroll
+  // position (top of the page, Movies rail, Series rail); on detail pages it
+  // follows the route.
+  const [activeNav, setActiveNav] = useState("home");
+
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
+    const path = location.pathname;
+    const onScroll = () => {
+      setScrolled(window.scrollY > 8);
+      if (path !== "/") return;
+      const offset = 160; // sticky header height + breathing room
+      const top = (id) => document.getElementById(id)?.getBoundingClientRect().top;
+      const seriesTop = top("rail-series");
+      const moviesTop = top("rail-movies");
+      if (seriesTop !== undefined && seriesTop <= offset) setActiveNav("series");
+      else if (moviesTop !== undefined && moviesTop <= offset) setActiveNav("movies");
+      else setActiveNav("home");
+    };
+
+    if (path.startsWith("/movie")) setActiveNav("movies");
+    else if (path.startsWith("/series")) setActiveNav("series");
+
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [location.pathname]);
 
   // "/" focuses search from anywhere, unless the user is already typing.
   useEffect(() => {
@@ -84,8 +104,6 @@ export default function Header() {
     }
   };
 
-  const onHome = location.pathname === "/";
-
   return (
     <header className={`site-header${scrolled ? " is-scrolled" : ""}`}>
       <div className="site-header-inner">
@@ -114,7 +132,7 @@ export default function Header() {
               key={item.key}
               type="button"
               className="site-nav-link"
-              aria-current={item.key === "home" && onHome ? "page" : undefined}
+              aria-current={item.key === activeNav ? "page" : undefined}
               onClick={() => goTo(item)}
             >
               {item.label}
